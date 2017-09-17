@@ -28,9 +28,11 @@ public class Client {
 	String host;
 	int port;
 	ServerListener sl;
+	String name;
 	
-	public Client(String host, int port) {
+	public Client(String host, int port, String name) {
 		
+		this.name = name;
 		this.port = port;
 		this.host = host;
 		
@@ -44,8 +46,8 @@ public class Client {
 		new Thread(sl).start();
 	}
 	
-	public void sendTextMessage(String user, String msg) {
-		
+	public void sendTextMessage(String msg) {
+		String user = this.name;
 		try {
 			PrintWriter out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()));
 			out.println("TEXT:" + user + "|" + msg);
@@ -55,8 +57,8 @@ public class Client {
 		}
 	}
 	
-	public void sendImage(String fileName, String user) {
-		
+	public void sendImage(String fileName) {
+		String user = this.name;
 		PrintWriter printOut = null;
 		try {
 			printOut = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()));

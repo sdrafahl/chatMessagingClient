@@ -6,21 +6,25 @@ import java.util.Scanner;
 public class Main {
 	
 	public static void main(String[] args) {
-		Client client = new Client("localhost", 6009);
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Please Enter Your Name");
+		System.out.println("");
+		String name = scan.next();
+		
+		Client client = new Client("localhost", 6009, name);
+		
 		while(true) {
+			
 			System.out.println("Please enter 1 to send a message or 2 to send an image.");
-			Scanner scan = new Scanner(System.in);
+			
 			int choice = scan.nextInt();
 			if(choice == 1) {
-				System.out.println("Enter Your Username");
-				System.out.println("");
-				String name = scan.next();
 				scan.nextLine();
 				System.out.println("Enter Your Message");
 				System.out.println("");
 				String message = scan.nextLine();
 				System.out.println("Sending Message....");
-				client.sendTextMessage(name, message);
+				client.sendTextMessage(message);
 			}
 			
 			if(choice == 2) {
@@ -28,11 +32,7 @@ public class Main {
 				System.out.println("Enter the file name");
 				System.out.println("");
 				String fileName = scan.nextLine();
-				System.out.println("Enter your username");
-				System.out.println("");
-				String user = scan.nextLine();
-				System.out.println("");
-				client.sendImage(fileName, user);
+				client.sendImage(fileName);
 			}
 		}
 	}
