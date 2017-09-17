@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -53,16 +55,19 @@ public class Client {
 		}
 	}
 	
-	public void sendImage(String fileName) {
+	public void sendImage(String fileName, String user) {
 		
 		PrintWriter printOut = null;
 		try {
 			printOut = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		printOut.println(fileName);
+		String extension = fileName.substring(fileName.length()-4);
+		String outFileName = fileName.substring(0, fileName.length()-4);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		printOut.println("I" + outFileName + "_" + user + "_" + dtf.format(now) + extension);
 		printOut.flush();
 		File file = new File("images/" + fileName);
 		DataOutputStream dos = null;
@@ -74,33 +79,23 @@ public class Client {
 		}
 		FileInputStream fis = null;
 		try {
+			System.out.println("sending " + file.toString());
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		byte[] buffer = new byte[4096];
+		byte[] buffer = new byte[10000];
 		
 		try {
 			while (fis.read(buffer) > 0) {
 				dos.write(buffer);
 			}
+			dos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		try {
-			fis.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
-		
-	    
 	}
 	
 	
